@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: country-lookup-deployment
+  labels:
+    app: country-lookup
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: country-lookup
+  template:
+    metadata:
+      labels:
+        app: country-lookup
+    spec:
+      containers:
+      - name: country-lookup-container
+        image: 797shubham/country-lookup-service:latest
+        ports:
+        - containerPort: 5000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: country-lookup-service
+spec:
+  selector:
+    app: country-lookup
+  ports:
+    - protocol: "TCP"
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer
